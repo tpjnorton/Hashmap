@@ -1,0 +1,17 @@
+This hashmap supports 4 key operations:
+
+- insert
+- delete
+- lookup
+- resize
+
+Resize is only allowed to occur in the master thread due to difficulties
+resising a table (a large operation) without causing large bottlenecks or
+having large blocking times in multithreaded sections of a program using 
+this class.
+
+Each bucket in the hashmap is lockable; as such multiple threads can write
+to multiple locations in the map at once. This is achieved by giving each
+bucket a std::mutex to lock when a thread needs to access this bucket.
+
+This way the table is thread-safe yet concurrent to a strong degree.
